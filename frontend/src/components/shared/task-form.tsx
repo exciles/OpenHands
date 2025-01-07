@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { I18nKey } from "#/i18n/declaration";
 import { RootState } from "#/store";
 import { addFile, removeFile } from "#/state/initial-query-slice";
 import { SuggestionBubble } from "#/components/features/suggestions/suggestion-bubble";
@@ -20,6 +22,7 @@ interface TaskFormProps {
 }
 
 export function TaskForm({ ref }: TaskFormProps) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -28,9 +31,10 @@ export function TaskForm({ ref }: TaskFormProps) {
   );
 
   const [text, setText] = React.useState("");
-  const [suggestion, setSuggestion] = React.useState(
-    getRandomKey(SUGGESTIONS["non-repo"]),
-  );
+  const [suggestion, setSuggestion] = React.useState(() => {
+    const key = getRandomKey(SUGGESTIONS["non-repo"]);
+    return { key, value: SUGGESTIONS["non-repo"][key] };
+  });
   const [inputIsFocused, setInputIsFocused] = React.useState(false);
   const { mutate: createConversation, isPending } = useCreateConversation();
 
@@ -38,24 +42,22 @@ export function TaskForm({ ref }: TaskFormProps) {
     const suggestions = SUGGESTIONS["non-repo"];
     // remove current suggestion to avoid refreshing to the same suggestion
     const suggestionCopy = { ...suggestions };
-    delete suggestionCopy[suggestion];
+    delete suggestionCopy[suggestion.key];
 
     const key = getRandomKey(suggestionCopy);
-    setSuggestion(key);
+    setSuggestion({ key, value: suggestions[key] });
   };
 
   const onClickSuggestion = () => {
-    const suggestions = SUGGESTIONS["non-repo"];
-    const value = suggestions[suggestion];
-    setText(value);
+    setText(suggestion.value);
   };
 
   const placeholder = React.useMemo(() => {
     if (selectedRepository) {
-      return `What would you like to change in ${selectedRepository}?`;
+      return t(I18nKey.LANDING$CHANGE_PROMPT, { repo: selectedRepository });
     }
 
-    return "What do you want to build?";
+    return t(I18nKey.SUGGESTIONS$WHAT_TO_BUILD);
   }, [selectedRepository]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

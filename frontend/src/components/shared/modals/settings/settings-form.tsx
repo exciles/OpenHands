@@ -2,11 +2,11 @@ import { useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import React from "react";
 import posthog from "posthog-js";
+import { I18nKey } from "#/i18n/declaration";
 import { organizeModelsAndProviders } from "#/utils/organize-models-and-providers";
 import { getDefaultSettings, Settings } from "#/services/settings";
 import { extractModelAndProvider } from "#/utils/extract-model-and-provider";
 import { DangerModal } from "../confirmation-modals/danger-modal";
-import { I18nKey } from "#/i18n/declaration";
 import { extractSettings, saveSettingsView } from "#/utils/settings-utils";
 import { useEndSession } from "#/hooks/use-end-session";
 import { ModalButton } from "../../buttons/modal-button";
@@ -206,18 +206,18 @@ export function SettingsForm({
             <ModalButton
               disabled={disabled}
               type="submit"
-              text={t(I18nKey.SETTINGS_FORM$SAVE_LABEL)}
+              text={t(I18nKey.SAVE_BUTTON)}
               className="bg-[#4465DB] w-full"
             />
             <ModalButton
-              text={t(I18nKey.SETTINGS_FORM$CLOSE_LABEL)}
+              text={t(I18nKey.CLOSE_BUTTON)}
               className="bg-[#737373] w-full"
               onClick={onClose}
             />
           </div>
           <ModalButton
             disabled={disabled}
-            text={t(I18nKey.SETTINGS_FORM$RESET_TO_DEFAULTS_LABEL)}
+            text={t(I18nKey.RESET_TO_DEFAULTS)}
             variant="text-like"
             className="text-danger self-start"
             onClick={() => {
@@ -231,17 +231,15 @@ export function SettingsForm({
         <ModalBackdrop>
           <DangerModal
             testId="reset-defaults-modal"
-            title={t(I18nKey.SETTINGS_FORM$ARE_YOU_SURE_LABEL)}
-            description={t(
-              I18nKey.SETTINGS_FORM$ALL_INFORMATION_WILL_BE_DELETED_MESSAGE,
-            )}
+            title={t(I18nKey.CONFIRM_RESET_TITLE)}
+            description={t(I18nKey.CONFIRM_RESET_MESSAGE)}
             buttons={{
               danger: {
-                text: t(I18nKey.SETTINGS_FORM$RESET_TO_DEFAULTS_LABEL),
+                text: t(I18nKey.RESET_TO_DEFAULTS),
                 onClick: handleConfirmResetSettings,
               },
               cancel: {
-                text: t(I18nKey.SETTINGS_FORM$CANCEL_LABEL),
+                text: t(I18nKey.CANCEL_BUTTON),
                 onClick: () => setConfirmResetDefaultsModalOpen(false),
               },
             }}
@@ -251,17 +249,15 @@ export function SettingsForm({
       {confirmEndSessionModalOpen && (
         <ModalBackdrop>
           <DangerModal
-            title={t(I18nKey.SETTINGS_FORM$END_SESSION_LABEL)}
-            description={t(
-              I18nKey.SETTINGS_FORM$CHANGING_WORKSPACE_WARNING_MESSAGE,
-            )}
+            title={t(I18nKey.END_SESSION_TITLE)}
+            description={t(I18nKey.END_SESSION_MESSAGE)}
             buttons={{
               danger: {
-                text: t(I18nKey.SETTINGS_FORM$END_SESSION_LABEL),
+                text: t(I18nKey.END_SESSION_BUTTON),
                 onClick: handleConfirmEndSession,
               },
               cancel: {
-                text: t(I18nKey.SETTINGS_FORM$CANCEL_LABEL),
+                text: t(I18nKey.CANCEL_BUTTON),
                 onClick: () => setConfirmEndSessionModalOpen(false),
               },
             }}
