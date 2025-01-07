@@ -627,6 +627,7 @@ if __name__ == '__main__':
             return {'status': 'not initialized'}
         return {'status': 'ok'}
 
+    @app.post('/execute_action')
     # ================================
     # VSCode-specific operations
     # ================================
